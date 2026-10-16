@@ -21,10 +21,39 @@ def load_prices():
     with open(DATA_DIR / "prices.csv", encoding="utf-8") as file:
         return list(csv.DictReader(file))
 
-
 def filter_prices(prices, ticker):
     return [row for row in prices if row["ticker"] == ticker]
 
+def get_first_close(prices):
+    return float(prices[0]["close"])
+
+def get_last_close(prices) :
+    return float(prices[-1]["close"])
+
+def display_market_summary(asset, prices, show_currency=True):
+
+    # Récupérer les informations de l'actif
+    ticker = asset["ticker"]
+    name = asset["name"]
+
+    # Compter les observations
+    observations = len(prices)
+
+    # Récupérer les prix de clôture
+    first_close = get_first_close(prices)
+    last_close = get_last_close(prices)
+
+    # Déterminer si la devise doit être affichée
+    if show_currency:
+        currency = " " + asset["currency"]
+    else:
+        currency = ""
+
+    # Afficher les informations
+    print(f"{ticker} - {name}")
+    print(f"Observations : {observations}")
+    print(f"First close : {first_close:.2f}{currency}")
+    print(f"Last close  : {last_close:.2f}{currency}")
 
 def main():
     instruments = load_instruments()
@@ -38,6 +67,9 @@ def main():
 
     instrument_latest = instrument_prices[-1]
     benchmark_latest = benchmark_prices[-1]
+
+    display_market_summary(instrument, instrument_prices)
+    display_market_summary(benchmark, benchmark_prices, show_currency = False)
 
     print("=== MarketPulse ===")
     print()
@@ -55,7 +87,6 @@ def main():
     print("Observations")
     print(f"{instrument['ticker']}: {len(instrument_prices)}")
     print(f"{benchmark['ticker']}: {len(benchmark_prices)}")
-
 
 if __name__ == "__main__":
     main()
