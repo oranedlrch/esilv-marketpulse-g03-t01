@@ -5,8 +5,8 @@ Copy this file to `TEAM.md` in your team repository and complete it before start
 ## Course
 
 - Module: MESIFI472326 - Python, Git, Linux
-- TD Group: GXX
-- MarketPulse Team: TXX
+- TD Group: G03
+- MarketPulse Team: T01
 
 ## Members
 
@@ -21,7 +21,7 @@ Add a fourth row only if your team has four members.
 
 ## Repository
 
-- Team repository: `esilv-marketpulse-gXX-tYY`
+- Team repository: `esilv-marketpulse-g03-t01`
 - Upstream repository: `tawounfouet/esilv-marketpulse`
 
 ## Market choice
