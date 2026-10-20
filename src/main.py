@@ -30,6 +30,12 @@ def get_first_close(prices):
 def get_last_close(prices) :
     return float(prices[-1]["close"])
 
+def get_first_date(prices):
+    return prices[0]["date"]
+
+def get_last_date(prices):
+    return prices[-1]["date"]
+
 def display_market_summary(asset, prices, show_currency=True):
 
     # Récupérer les informations de l'actif
@@ -43,6 +49,10 @@ def display_market_summary(asset, prices, show_currency=True):
     first_close = get_first_close(prices)
     last_close = get_last_close(prices)
 
+    # Récupérer les dates des observations
+    first_date = get_first_date(prices)
+    last_date = get_last_date(prices)
+
     # Déterminer si la devise doit être affichée
     if show_currency:
         currency = " " + asset["currency"]
@@ -52,6 +62,8 @@ def display_market_summary(asset, prices, show_currency=True):
     # Afficher les informations
     print(f"{ticker} - {name}")
     print(f"Observations : {observations}")
+    print(f"First date   : {first_date}")
+    print(f"Last date    : {last_date}")
     print(f"First close : {first_close:.2f}{currency}")
     print(f"Last close  : {last_close:.2f}{currency}")
 
