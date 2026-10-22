@@ -95,6 +95,7 @@ def main():
     print(f"Last level: {benchmark_latest['close']}")
     print()
     print(f"Period: {LOOKBACK_LABEL}")
+    print("Provider: CSV / JSON")
     print(f"Interval: {INTERVAL_LABEL}")
     print()
     print("Observations")
