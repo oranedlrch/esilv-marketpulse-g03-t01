@@ -3,7 +3,15 @@ def index_by_date(prices):
 
 
 def align_series(instrument_prices, benchmark_prices):
-    raise NotImplementedError
+    instrument_by_date = index_by_date(instrument_prices)
+    benchmark_by_date = index_by_date(benchmark_prices)
+    aligned_instrument=[]
+    aligned_benchmark=[]
+    for date in sorted(instrument_by_date):
+        if date in benchmark_by_date:
+            aligned_instrument.append(instrument_by_date[date])
+            aligned_benchmark.append(benchmark_by_date[date])
+    return aligned_instrument, aligned_benchmark
 
 
 def calculate_period_return(prices):
