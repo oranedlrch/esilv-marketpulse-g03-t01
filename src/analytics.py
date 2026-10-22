@@ -1,5 +1,10 @@
 def index_by_date(prices):
-    raise NotImplementedError
+    prices_by_date = {}
+
+    for row in prices:
+        prices_by_date[row["date"]] = row
+
+    return prices_by_date
 
 
 def align_series(instrument_prices, benchmark_prices):
@@ -15,7 +20,17 @@ def align_series(instrument_prices, benchmark_prices):
 
 
 def calculate_period_return(prices):
-    raise NotImplementedError
+    if not prices:
+        raise ValueError("The series is empty.")
+
+    first_close = float(prices[0]["close"])
+    last_close = float(prices[-1]["close"])
+
+    if first_close == 0:
+        raise ValueError("The first close is zero.")
+
+    return ((last_close / first_close) - 1.0) * 100.0
+
 
 
 def calculate_base_100(prices):
