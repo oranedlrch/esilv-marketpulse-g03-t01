@@ -194,6 +194,8 @@ Terminal:
 python src/main.py
 ```
 
+Run this command from the repository root, which contains the src/ and data/ directories.
+
 Dashboard, introduced in TD11:
 
 ```bash
