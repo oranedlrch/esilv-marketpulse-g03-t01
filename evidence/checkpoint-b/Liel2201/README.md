@@ -13,3 +13,8 @@ Commit: b426309.
 ## Evidence
 - [Pull Request](01_pull_request.png)
 - [Code review](02_code_review.png)
+
+## TD08 — Yahoo Finance
+
+- [03_yahoo_market_data.png](03_yahoo_market_data.png) — live Yahoo Finance data
+- [04_instrument_benchmark.png](04_instrument_benchmark.png) — AAPL and SP500 comparison over one month of daily data
