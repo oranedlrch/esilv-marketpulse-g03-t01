@@ -1,7 +1,14 @@
 from pathlib import Path
+import argparse
 import csv
 import json
-from analytics import (align_series,calculate_period_return,calculate_base_100,calculate_relative_performance,)
+
+from analytics import (
+    align_series,
+    calculate_period_return,
+    calculate_base_100,
+    calculate_relative_performance,
+)
 
 DATA_DIR = Path("data/sample")
 
@@ -21,23 +28,28 @@ def load_prices():
     with open(DATA_DIR / "prices.csv", encoding="utf-8") as file:
         return list(csv.DictReader(file))
 
+
 def filter_prices(prices, ticker):
     return [row for row in prices if row["ticker"] == ticker]
+
 
 def get_first_close(prices):
     return float(prices[0]["close"])
 
-def get_last_close(prices) :
+
+def get_last_close(prices):
     return float(prices[-1]["close"])
+
 
 def get_first_date(prices):
     return prices[0]["date"]
 
+
 def get_last_date(prices):
     return prices[-1]["date"]
 
-def display_market_summary(asset, prices, show_currency=True):
 
+def display_market_summary(asset, prices, show_currency=True):
     # Récupérer les informations de l'actif
     ticker = asset["ticker"]
     name = asset["name"]
@@ -68,21 +80,29 @@ def display_market_summary(asset, prices, show_currency=True):
     print(f"First close : {first_close:.2f}{currency}")
     print(f"Last close  : {last_close:.2f}{currency}")
 
-def main():
-    instruments = load_instruments()
-    prices = load_prices()
 
+def main(provider="csv"):
+    instruments = load_instruments()
     instrument = instruments["instrument"]
     benchmark = instruments["benchmark"]
 
-    instrument_prices = filter_prices(prices, instrument["ticker"])
-    benchmark_prices = filter_prices(prices, benchmark["ticker"])
+    if provider == "yahoo":
+        from providers.yahoo_provider import fetch_yahoo_prices
+
+        instrument_prices = fetch_yahoo_prices(instrument["ticker"])
+        benchmark_prices = fetch_yahoo_prices(benchmark["ticker"])
+        provider_label = "Yahoo Finance"
+    else:
+        prices = load_prices()
+        instrument_prices = filter_prices(prices, instrument["ticker"])
+        benchmark_prices = filter_prices(prices, benchmark["ticker"])
+        provider_label = "CSV / JSON"
 
     instrument_latest = instrument_prices[-1]
     benchmark_latest = benchmark_prices[-1]
 
     display_market_summary(instrument, instrument_prices)
-    display_market_summary(benchmark, benchmark_prices, show_currency = False)
+    display_market_summary(benchmark, benchmark_prices, show_currency=False)
 
     print("=== MarketPulse ===")
     print()
@@ -95,19 +115,23 @@ def main():
     print(f"Last level: {benchmark_latest['close']}")
     print()
     print(f"Period: {LOOKBACK_LABEL}")
-    print("Provider: CSV / JSON")
+    print(f"Provider: {provider_label}")
     print(f"Interval: {INTERVAL_LABEL}")
     print()
     print("Observations")
     print(f"{instrument['ticker']}: {len(instrument_prices)}")
     print(f"{benchmark['ticker']}: {len(benchmark_prices)}")
 
-    aligned_instrument, aligned_benchmark = align_series(instrument_prices, benchmark_prices)
+    aligned_instrument, aligned_benchmark = align_series(
+        instrument_prices, benchmark_prices
+    )
 
     instrument_return = calculate_period_return(aligned_instrument)
     benchmark_return = calculate_period_return(aligned_benchmark)
 
-    relative_performance = calculate_relative_performance(instrument_return, benchmark_return)
+    relative_performance = calculate_relative_performance(
+        instrument_return, benchmark_return
+    )
 
     instrument_base_100 = calculate_base_100(aligned_instrument)
     benchmark_base_100 = calculate_base_100(aligned_benchmark)
@@ -132,5 +156,9 @@ def main():
         f"{benchmark_base_100[-1]['value']:.2f}"
     )
 
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--provider", choices=("csv", "yahoo"), default="csv")
+    args = parser.parse_args()
+    main(args.provider)
