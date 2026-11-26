@@ -164,8 +164,10 @@ def main():
     print(f"Interval: {snapshot['interval']}")
     print()
 
+    print("Instrument")
     display_market_summary(instrument, instrument_prices)
     print()
+    print("Benchmark")
     display_market_summary(benchmark, benchmark_prices, show_currency=False)
 
     print()
