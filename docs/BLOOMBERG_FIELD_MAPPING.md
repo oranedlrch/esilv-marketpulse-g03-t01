@@ -36,3 +36,19 @@ The source fields are teaching wrapper keys, not Bloomberg LIVE field mnemonics.
 Canonical tickers remain AAPL and SP500.
 
 No fields are missing. The benchmark volume is 0 in the approved sample.
+
+## TD10 handoff
+
+- Access mode: APPROVED_SAMPLE
+- Instrument identifier: AAPL US Equity
+- Benchmark identifier: SPX Index
+- Date representation: YYYY-MM-DD
+- Input structure: JSON containing a series list, with an observations list for each asset.
+- Missing fields: none.
+- Special normalization notes: preserve canonical tickers, convert OHLC values to float and volume to int.
+
+Both series contain 21 observations from 2026-09-01 to 2026-09-30.
+
+Expected canonical reference:
+
+`data/sample/bloomberg_reference_expected.json`
